@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>三个定时器的对比实验</title>
+  <style media="screen">
+      .myDiv{
+        background-color: lightblue;width: 0;height: 20px;line-height: 20px;
+        margin-bottom: 10px;
+
+      }
+  </style>
+</head>
+
+<body>
+   <span>setInterval</span>
+  <div class="myDiv" id="myDiv1">0%</div>
+  <span>setTimeout</span>
+  <div class="myDiv" id="myDiv2">0%</div>
+   <span>requestAnimationFrame</span>
+  <div class="myDiv" id="myDiv3">0%</div>
+  <button id="btn">run</button>
+  <script>
+    var timer1, timer2, timer3;
+    btn.onclick = function() {
+      clearInterval(timer1);
+      clearTimeout(timer2);
+      cancelAnimationFrame(timer3);
+      myDiv1.style.width = '0';
+      myDiv2.style.width = '0';
+      myDiv3.style.width = '0';
+      timer1 = setInterval(function() {
+        if (parseInt(myDiv1.style.width) < 500) {
+          myDiv1.style.width = parseInt(myDiv1.style.width) + 5 + 'px';
+          myDiv1.innerHTML = parseInt(myDiv1.style.width) / 5 + '%';
+        } else {
+          clearInterval(timer1);
+        }
+      }, 16);
+
+      timer2 = setTimeout(function fn() {
+        if (parseInt(myDiv2.style.width) < 500) {
+          myDiv2.style.width = parseInt(myDiv2.style.width) + 5 + 'px';
+          myDiv2.innerHTML = parseInt(myDiv2.style.width) / 5 + '%';
+          timer2 = setTimeout(fn, 16);
+        } else {
+          clearTimeout(timer2);
+        }
+      }, 16);
+
+      timer3 = requestAnimationFrame(function fn(){
+        if(parseInt(myDiv3.style.width) < 500){
+            myDiv3.style.width = parseInt(myDiv3.style.width) + 5 + 'px';
+            myDiv3.innerHTML =     parseInt(myDiv3.style.width)/5 + '%';
+            timer3 = requestAnimationFrame(fn);
+        }else{
+            cancelAnimationFrame(timer3);
+        }
+    });
+    }
+  </script>
+</body>
+
+</html>
