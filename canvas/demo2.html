@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>单个小球的碰撞实验</title>
+  <title>2个小球的碰撞实验</title>
   <style media="screen">
     * {
       margin: 0;
@@ -24,51 +24,28 @@
   <canvas id="canvas" width="300" height="200"></canvas>
 </body>
 <script type="text/javascript">
-  // var Ball = function(context) {
-  //   this.left = 0
-  //   this.top = 0
-  //   this.radius = 15
-  //   this.velocityX = 3
-  //   this.velocityY = 2
-  //   this.context = context
-  // }
-  //
-  // Ball.prototype = {
-  //   paint: function() {
-  //     this.context.beginPath()
-  //     this.context.arc(this.left + this.radius, this.top + this.radius,
-  //       this.radius, 0, Math.PI * 2, false)
-  //     this.context.fill()
-  //   },
-  //
-  //   move: function() {
-  //     this.left += this.velocityX
-  //     this.top += this.velocityY
-  //   }
-  // }
-
-  class Ball {
-    constructor(context) {
-      this.left = 0
-      this.top = 0
-      this.radius = 15
-      this.velocityX = 3
-      this.velocityY = 2
-      this.context = context
-    }
-    paint() {
-      this.context.beginPath()
-      this.context.arc(this.left + this.radius, this.top + this.radius,
-        this.radius, 0, Math.PI * 2, false)
-      this.context.fill()
-    }
-    move() {
-      this.left += this.velocityX
-      this.top += this.velocityY
-    }
+class Ball {
+  constructor(left,top,context) {
+    this.left = left
+    this.top = top
+    this.radius = 15
+    this.velocityX = 3
+    this.velocityY = 2
+    this.context = context
   }
+  paint() {
+    this.context.beginPath()
+    this.context.arc(this.left + this.radius, this.top + this.radius,
+      this.radius, 0, Math.PI * 2, false)
+    this.context.fill()
+  }
+  move() {
+    this.left += this.velocityX
+    this.top += this.velocityY
+  }
+}
 
-
+//碰撞检测代码
   function handleEdgeCollisions(ball) {
     var ballRight = ball.left + ball.radius * 2,
       ballBottom = ball.top + ball.radius * 2
@@ -94,17 +71,23 @@
     context.clearRect(0, 0, canvas.width, canvas.height)
 
     ball.move()
+    ball2.move()
     handleEdgeCollisions(ball)
+    handleEdgeCollisions(ball2)
     ball.paint()
+    ball2.paint()
 
     requestAnimationFrame(animate)
   }
 
   var canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d'),
-    ball = new Ball(context)
-  console.log(ball);
-  ball.paint()
+    ball = new Ball(0,0,context),
+    ball2 = new Ball(100,0,context)
+
+    ball.paint()
+  ball2.paint()
+
   requestAnimationFrame(animate)
 </script>
 

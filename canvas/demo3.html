@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>多个小球的碰撞实验</title>
+  <style media="screen">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    canvas {
+      border: 1px solid orange;
+      margin: 10px auto 0;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas" width="300" height="200"></canvas>
+</body>
+<script type="text/javascript">
+  let count = 3;
+  let ballList = [];
+  class Ball {
+    constructor(left, top, context, speedX, speedY) {
+      this.left = left
+      this.top = top
+      this.radius = 15
+      this.velocityX = speedX
+      this.velocityY = speedY
+      this.context = context
+      this.offsetLeft=20
+      this.offsetTop=10
+    }
+    paint() {
+      this.context.beginPath()
+      this.context.arc(this.left + this.radius, this.top + this.radius,
+        this.radius, 0, Math.PI * 2, false)
+      this.context.fill()
+    }
+    move() {
+      this.left += this.velocityX
+      this.top += this.velocityY
+    }
+  }
+
+  //碰撞检测代码
+  function handleEdgeCollisions(ball) {
+    var ballRight = ball.left + ball.radius * 2,
+      ballBottom = ball.top + ball.radius * 2
+    if (ball.left < 0) {
+      ball.left = 0
+      ball.velocityX = -ball.velocityX
+    } else if (ballRight > canvas.width) {
+      ball.left = canvas.width - ball.radius * 2
+      ball.velocityX = -ball.velocityX
+    }
+
+    if (ball.top < 0) {
+      ball.top = 0
+      ball.velocityY = -ball.velocityY
+    } else if (ballBottom > canvas.height) {
+      ball.top = canvas.height - ball.radius * 2
+      ball.velocityY = -ball.velocityY
+    }
+  }
+
+  function hitBalls(ballList) {
+    // var num = ballList.length
+    // for (i = 0; i < num - 1; i++) {
+    //   var ball1 = ballList[i];
+    //   ball1.left = ball1.offsetLeft + ball1.radius; //小球圆心坐标
+    //   ball1.top = ball1.offsetTop + ball1.radius;
+    //   console.log(ball1.offsetLeft);
+    //   for (j = i + 1; j < num; j++) {
+    //     var ball2 = ballList[j];
+    //     ball2.left = ball2.offsetLeft + ball2.radius;
+    //     ball2.top = ball2.offsetTop + ball2.radius;
+    //     dx = ball2.left - ball1.left; //两小球圆心距对应的两条直角边
+    //     dy = ball2.top - ball1.top;
+    //     var dist = Math.sqrt(dx * dx + dy * dy); //两直角边求圆心距
+    //     var misDist = ball1.radius + ball2.radius; //圆心距最小值
+    //     if (dist < misDist) {
+    //       //假设碰撞后球会按原方向继续做一定的运动，将其定义为运动A
+    //       var angle = Math.atan2(dy, dx);
+    //       //当刚好相碰，即dist=misDist时，tx=ballb.x, ty=ballb.y
+    //       tx = ball1.left + Math.cos(angle) * misDist;
+    //       ty = ball1.top + Math.sin(angle) * misDist;
+    //       //产生运动A后，tx > ballb.x, ty > ballb.y,所以用ax、ay记录的是运动A的值
+    //       ax = (tx - ball2.left) * .1;
+    //       ay = (ty - ball2.top) * .1;
+    //       //一个球减去ax、ay，另一个加上它，则实现反弹
+    //       ball1.velocityX -= ax;
+    //       ball1.velocityY -= ay;
+    //       ball2.velocityX += ax;
+    //       ball2.velocityY += ay;
+    //     }
+    //   }
+    // }
+    for (var i = 0; i < ballList.length; i++) {
+      let ball = ballList[i]
+      ball.move()
+      handleEdgeCollisions(ball)
+      ball.paint()
+    }
+  }
+
+  function animate(time) {
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    hitBalls(ballList);
+    requestAnimationFrame(animate)
+  }
+
+  var canvas = document.getElementById('canvas'),
+    context = canvas.getContext('2d');
+  for (var i = 0; i < count; i++) {
+    ballList.push(new Ball(i * 100 * Math.random(), i * 100 * Math.random(), context, 2 + i * Math.random(), 2 + i * Math.random()))
+  }
+  for (var i = 0; i < ballList.length; i++) {
+    ballList[i].paint()
+  }
+
+  requestAnimationFrame(animate)
+</script>
+
+</html>
