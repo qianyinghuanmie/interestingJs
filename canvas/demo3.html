@@ -71,37 +71,38 @@
   }
 
   function hitBalls(ballList) {
-    // var num = ballList.length
-    // for (i = 0; i < num - 1; i++) {
-    //   var ball1 = ballList[i];
-    //   ball1.left = ball1.offsetLeft + ball1.radius; //小球圆心坐标
-    //   ball1.top = ball1.offsetTop + ball1.radius;
-    //   console.log(ball1.offsetLeft);
-    //   for (j = i + 1; j < num; j++) {
-    //     var ball2 = ballList[j];
-    //     ball2.left = ball2.offsetLeft + ball2.radius;
-    //     ball2.top = ball2.offsetTop + ball2.radius;
-    //     dx = ball2.left - ball1.left; //两小球圆心距对应的两条直角边
-    //     dy = ball2.top - ball1.top;
-    //     var dist = Math.sqrt(dx * dx + dy * dy); //两直角边求圆心距
-    //     var misDist = ball1.radius + ball2.radius; //圆心距最小值
-    //     if (dist < misDist) {
-    //       //假设碰撞后球会按原方向继续做一定的运动，将其定义为运动A
-    //       var angle = Math.atan2(dy, dx);
-    //       //当刚好相碰，即dist=misDist时，tx=ballb.x, ty=ballb.y
-    //       tx = ball1.left + Math.cos(angle) * misDist;
-    //       ty = ball1.top + Math.sin(angle) * misDist;
-    //       //产生运动A后，tx > ballb.x, ty > ballb.y,所以用ax、ay记录的是运动A的值
-    //       ax = (tx - ball2.left) * .1;
-    //       ay = (ty - ball2.top) * .1;
-    //       //一个球减去ax、ay，另一个加上它，则实现反弹
-    //       ball1.velocityX -= ax;
-    //       ball1.velocityY -= ay;
-    //       ball2.velocityX += ax;
-    //       ball2.velocityY += ay;
-    //     }
-    //   }
-    // }
+    var num = ballList.length
+    for (i = 0; i < num - 1; i++) {
+      var ball1 = ballList[i];
+      ball1.left = ball1.offsetLeft + ball1.radius; //小球圆心坐标
+      ball1.top = ball1.offsetTop + ball1.radius;
+      console.log(ball1.offsetLeft);
+      for (j = i + 1; j < num; j++) {
+        var ball2 = ballList[j];
+        ball2.left = ball2.offsetLeft + ball2.radius;
+        ball2.top = ball2.offsetTop + ball2.radius;
+        dx = ball2.left - ball1.left; //两小球圆心距对应的两条直角边
+        dy = ball2.top - ball1.top;
+        var dist = Math.sqrt(dx * dx + dy * dy); //两直角边求圆心距
+        var misDist = ball1.radius + ball2.radius; //圆心距最小值
+        if (dist < misDist) {
+          //假设碰撞后球会按原方向继续做一定的运动，将其定义为运动A
+          var angle = Math.atan2(dy, dx);
+          //当刚好相碰，即dist=misDist时，tx=ballb.x, ty=ballb.y
+          tx = ball1.left + Math.cos(angle) * misDist;
+          ty = ball1.top + Math.sin(angle) * misDist;
+          //产生运动A后，tx > ballb.x, ty > ballb.y,所以用ax、ay记录的是运动A的值
+          ax = (tx - ball2.left) * .1;
+          ay = (ty - ball2.top) * .1;
+          //一个球减去ax、ay，另一个加上它，则实现反弹
+          ball1.velocityX -= ax;
+          ball1.velocityY -= ay;
+          ball2.velocityX += ax;
+          ball2.velocityY += ay;
+        }
+      }
+    }
+
     for (var i = 0; i < ballList.length; i++) {
       let ball = ballList[i]
       ball.move()
