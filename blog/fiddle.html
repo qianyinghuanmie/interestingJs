@@ -1,0 +1,122 @@
+<div id="myContain">
+  <h5 class="myH5">认真的用fiddle处理跨域</h5>
+  <p class="smallTitle">相信很多前端的同学都或多或少被跨域这个问题烦恼过，网上很多处理的方式其实都是要后端处理，<br>
+    用fiddle来处理 ，就不必看后端的脸色了，自己安安心心的倒腾接口，何乐而不为。</p>
+  <p class="smallTitle">在使用fiddle处理跨域之前，所需要注意的：</p>
+  <ul>
+    <li>1、是http请求还是的https请求，如果是https请求的话，要导入下证书，具体的步骤的：</li>
+    <li>2、下载证书 <a href="https://pan.baidu.com/s/1ZP6FgAIuDblZjOfaWaf4lg" target="_blank">点击下载</a></li>
+    <li>3、下载完后双击安装即可。</li>
+    <li>4、然后是fiddle的一些配置，可以参考下<a href="https://blog.csdn.net/laofashi2015/article/details/78476499" target="_blank">这篇文章</a>只需要看前面半部分的配置即可</li>
+    <li>5、可以输入 https://www.baidu.com 测试下是否能够捕获https请求。</li>
+    <li>6、到这里前期工作基本完成。</li>
+  </ul>
+  <h5 class="myH5">要区分需要处理跨域的场景</h5>
+  <p class="smallTitle">1、网上百花撩乱的fiddle处理方式</p>
+  <p>如果去搜索fiddle处理跨域，想必会搜索出来满屏幕的fiddle的处理方式。<br>不能用的不能说是错的，只是可能不适用当前自己所需要的场景。</p>
+  <p class="smallTitle">2、场景1，用本地的文件来替代网络上的文件，进行规则替换</p>
+  <p>这类的文章少说占了搜索结果的一半，</p>
+  <p class="notice">例如csdn的一篇 <a href="https://blog.csdn.net/qq_39207948/article/details/79758866">前端开发fiddler跨域请求代理</a></p>
+  <p>实际上就是对线上的文件进行替换，单个替换，正则匹配都行。</p>
+  <div><img src="http://file.yyyno.com/file/img/blog/fiddle-3.png" alt=""></div>
+  <p>替换成功后，便可以在本地修改代码使之生效。</p>
+  <p class="smallTitle">3、场景2，修改的Customize Rules，通常我们都这这类去修改规则，才能解决自己的跨域问题</p>
+  <p class="notice">值得注意的是，在这个场景值其实也分为两块，一块是在OnBeforeRequest中，还有一块是在OnBeforeResponse中，<br>就是一个发送请求之前，另一个是在发送请求之后响应之前
+    搞清楚了这个以后，就很容易知道自己在哪个地方，去添加什么代码了</p>
+  <p>如图所示：</p>
+  <div><img src="http://file.yyyno.com/file/img/blog/fiddle-1.png" alt=""></div>
+  <div><img src="http://file.yyyno.com/file/img/blog/fiddle-2.png" alt=""></div>
+  <h5 class="myH5">具体举例说明：</h5>
+  <p>1、当需求在请求返回的时候解决跨域，要设置 Access-Control-Allow-Origin:*</p>
+  <div class="cnblogs_Highlighter">
+    <pre class="brush:javascript;gutter:true;">
+       static function OnBeforeResponse(oSession: Session) {
+        if (m_Hide304s &amp;&amp; oSession.responseCode == 304) {
+            oSession["ui-hide"] = "true";
+        }
+        oSession.responseCode=200;
+        oSession.oResponse.headers.Add("Access-Control-Allow-Headers", "content-type,x-requested-with");
+        oSession.oResponse.headers.Add("Access-Control-Allow-Origin","*");
+    }
+</pre>
+  </div>
+  <p class="notice">可以参考 <a href="https://segmentfault.com/a/1190000017102559" target="_blank">这篇文章</a></p>
+  <p>2、当要设置请求头部的时候，就需要在OnBeforeRequest做文章了</p>
+  <div class="cnblogs_Highlighter">
+    <pre class="brush:javascript;gutter:true;">
+  if (oSession.HostnameIs("xxx.xxx.com")){
+          oSession.oRequest.headers.Remove("Origin");
+      }
+</pre>
+  </div>
+  <p>例如可以针对特定的域名移除掉Origin</p>
+  <p class="notice">此外也可以处理重定向</p>
+  <div class="cnblogs_Highlighter">
+    <pre class="brush:javascript;gutter:true;">
+      var origin_host="172.16.11.21";
+            var origin_port="8080";
+            var origin_domain=origin_host+":"+origin_port;
+            var replace_host="www.hongbaorili.com";
+            var replace_port="80";
+            var replace_domain=replace_host+":"+replace_port;
+
+            if(oSession.host==origin_domain){
+                oSession.host=replace_domain;
+                }
+
+            if ( (oSession.PathAndQuery == (origin_host+":"+origin_port))) {
+                oSession.PathAndQuery = replace_host+":"+replace_port;
+            }
+</pre>
+  </div>
+  <p>比如 <a href="https://blog.csdn.net/u010565244/article/details/51094319" target="_blank">fiddler重定向本地服务器URL到线上URL</a></p>
+  <h5 class="myH5">结尾：</h5>
+  <p>其实在Customize Rules.js这个文件中还可以处理很多场景下的东西，有兴趣的话可以自己再多研究，另外这一篇文章，也介绍的蛮多详情点，<a href="https://www.cnblogs.com/hhhyaaon/p/5839283.html" target="_blank">点击这里</a></p>
+  <p>这段时间都一直浸淫在小程序当中，有愿意讨论的童鞋欢迎，目前小程序已稳定上线2个多月，社区类的小程序。</p>
+  <p>转载请注明<a href="https://www.cnblogs.com/star-wind/p/10341573.html" target="
+    ">原文地址</a> https://www.cnblogs.com/star-wind/p/10341573.html:谢谢</p>
+  <p><a href="https://github.com/qianyinghuanmie" target="_blank">我的github</a>,欢迎拍砖</p>
+</div>
+<style>
+  < !-- #myContain .myH3 {
+    background-color: #e2e7e6;
+    color: darkgoldenrod;
+    line-height: 3rem;
+    text-indent: 1em;
+    font-size: 20px;
+  }
+
+  #myContain p {
+    padding-left: 2em;
+    line-height: 1.4em;
+    font-size: 15px;
+  }
+
+  #myContain p .myImg {
+    width: 700px !important;
+    height: auto;
+  }
+
+  #myContain a {
+    color: darkorange;
+  }
+
+  #myContain .myH5 {
+    text-indent: 3em;
+    font-size: 16px;
+    color: cornsilk;
+    background-color: darkgray;
+    line-height: 2em;
+  }
+
+  .notice {
+    color: red;
+  }
+
+  .smallTitle {
+    font-size: 14px;
+    color: brown;
+  }
+
+  -->
+</style>
