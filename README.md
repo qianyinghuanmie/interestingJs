@@ -7,5 +7,6 @@ Some basic and interesting knowledge of JavaScript
 - [mvvm篇](https://github.com/qianyinghuanmie/interestingJs/tree/master/mvvm)
 - [node篇](https://github.com/qianyinghuanmie/interestingJs/tree/master/node)
 - [es6篇](https://github.com/qianyinghuanmie/interestingJs/tree/master/es6)
+- [我的博客](https://github.com/qianyinghuanmie/interestingJs/tree/master/blog)
 - 播放器篇
 - 实践篇
