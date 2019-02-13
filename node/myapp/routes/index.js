@@ -10,32 +10,21 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/login', function(req, res, next) {
   let searchSql = 'SELECT name FROM tb_emp1 WHERE id="4"'; //搜索数据
   connection.query(searchSql, function(error, results, fields) {
     if (error) throw error;
     console.log('--------------------------searchSql----------------------------');
     console.log('search :',results);
+    console.log(req)
+    console.log(res)
+    console.log(next)
     console.log('------------------------------------------------------------\n\n');
     //结束回话
     connection.end();
+      res.render('index', { title:  results[0]});
   });
-  res.render('index', { title: "1"});
 });
 
-router.get('/select', ctx => {
-  return new Promise(resolve => {
-    let name = ctx.query.name;
-    let searchSql = 'SELECT name FROM tb_emp1 WHERE id="4"'; //搜索数据
-    connection.query(sql, (err, result) => {
-      if (err) throw err;
-      ctx.body = {
-        code: 200,
-        data: result
-      }
-      resolve();
-    })
-  })
-})
 
 module.exports = router;
