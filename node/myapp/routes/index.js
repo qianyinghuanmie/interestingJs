@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 /* GET home page. */
-router.get('/login', function(req, res, next) {
+router.get('/', function(req, res, next) {
   let searchSql = 'SELECT name FROM tb_emp1 WHERE id="4"'; //搜索数据
   connection.query(searchSql, function(error, results, fields) {
     if (error) throw error;

@@ -39,3 +39,46 @@ pm2 reload ecosystem.config.js
 ###### 增加sql语句
 
 ###### 修改sql语句
+
+>- 4、[使用sass中间件](https://www.jianshu.com/p/8d518c09ce28)
+
+- 1.引入模块node-sass-middleware;
+
+ <pre>npm install node-sass-middleware</pre>
+
+ - 2.使用node-sass-middleware
+
+<b>当前目录结构</b>
+<pre>
+public
+-scss
+--style.scss
+-stylesheets
+--style.css
+</pre>
+
+#####调用方法
+
+ <pre>
+ ……………………
+ var sassMiddleware = require('node-sass-middleware');
+
+ var myPrefix = '/static';
+ var destination = path.join(__dirname, 'public/stylesheets');
+ app.use(sassMiddleware({
+   /* Options */
+   src: path.join(__dirname, 'public/scss'),
+   dest: destination,
+   debug: false,
+   force: true,
+   outputStyle: 'compressed',
+   prefix: myPrefix
+ }));
+ app.use(myPrefix,express.static(path.join(__dirname, 'public')));
+ </pre>
+
+ ######引入
+
+ <pre>
+link(rel='stylesheet', href='/static/style.css')
+ </pre>

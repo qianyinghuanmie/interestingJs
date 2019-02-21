@@ -2,6 +2,9 @@ doctype html
 html
   head
     title= '我的小站'
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/static/style.css')
+    meta(content=yes name=apple-mobile-web-app-capable)
+    meta(content=yes name=apple-touch-fullscreen)
+    meta(content="telephone=no,email=no" name=format-detection)
   body
     block content
