@@ -1,22 +1,11 @@
 extends layout
 
 block content
-  h1= title.name
-  a(href='https://www.baidu.com') 百度
-  p Welcome to #{title.name}
-  input(
-  type='checkbox'
-  name='agreement'
-  checked
-  )
-  input(
-  type='text'
-  name='agreement'
-  )
-  div(class='div-class', (click)='play()') 点击运行
-  - var btnType = 'info'
-  - var btnSize = 'lg'
-  button(type='button' class='btn btn-' + btnType + ' btn-' + btnSize) 登录
-  |
-  |
-  button(type='button' class=`btn btn-${btnType} btn-${btnSize}`) 注册
+  
+  canvas#canvas
+  p#message Move your mouse
+  a(class='enter', href='/login') 点击进入
+  
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/three.js/101/three.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.5/dat.gui.min.js")
+  script(src="/static/js/index.js")

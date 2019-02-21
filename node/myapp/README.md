@@ -84,3 +84,16 @@ link(rel='stylesheet', href='/static/style.css')
  </pre>
 
 ###### 启动服务即可
+
+>- 5、[使用pug模板](https://github.com/pugjs/pug)
+
+-[中文文档](https://pug.bootcss.com/api/getting-started.html)
+
+>- 6、[使用babel编译es6](https://github.com/pugjs/pug)
+
+### 准备要实现的功能
+
+功能|完成度|完成日期
+--|:--:|--:
+注册|0|0
+登录|0|0

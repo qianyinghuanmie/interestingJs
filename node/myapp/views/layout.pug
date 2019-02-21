@@ -2,9 +2,13 @@ doctype html
 html
   head
     title= '我的小站'
-    link(rel='stylesheet', href='/static/style.css')
+    link(rel='stylesheet', href='/static/stylesheets/mixin.css')
+    link(rel='stylesheet', href='/static/stylesheets/style.css')
     meta(content=yes name=apple-mobile-web-app-capable)
     meta(content=yes name=apple-touch-fullscreen)
     meta(content="telephone=no,email=no" name=format-detection)
+    meta(name="viewport" content="width=width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+    script(src="/static/js/fontsize.js")
+    script(src="/static/js/flexible.js")
   body
     block content
