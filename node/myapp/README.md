@@ -57,7 +57,7 @@ public
 --style.css
 </pre>
 
-#####调用方法
+##### 调用方法
 
  <pre>
  ……………………
@@ -77,8 +77,10 @@ public
  app.use(myPrefix,express.static(path.join(__dirname, 'public')));
  </pre>
 
- ######引入
+ ###### 引入
 
  <pre>
 link(rel='stylesheet', href='/static/style.css')
  </pre>
+
+###### 启动服务即可
