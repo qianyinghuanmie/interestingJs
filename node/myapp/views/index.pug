@@ -2,10 +2,11 @@ extends layout
 
 block content
   
-  canvas#canvas
-  p#message Move your mouse
-  a(class='enter', href='/login') 点击进入
-  
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/three.js/101/three.min.js")
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.5/dat.gui.min.js")
-  script(src="/static/js/index.js")
+  div#indexPage
+    canvas#canvas
+    p#message Move your mouse
+    a(class='enter', href='/login') 点击进入
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/three.js/101/three.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.5/dat.gui.min.js")
+    script(src="/static/js/index.js")
