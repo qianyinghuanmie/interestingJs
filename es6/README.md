@@ -10,17 +10,121 @@
 + promise
 * 箭头函数
 - Classes
-+ promise
-* 箭头函数
++ async function
+* await
+- symbol
++ async function
+* await
 
-##### proxy
+#### proxy
+
+*Proxy 对象用于定义基本操作的自定义行为（如属性查找，赋值，枚举，函数调用等）*`
+```
+let p = new Proxy(target, handler);
+```
+- target:用Proxy包装的目标对象（可以是任何类型的对象，包括原生数组，函数，甚至另一个代理）。
++ handler:一个对象，其属性是当执行一个操作时定义代理的行为的函数
+
+```
+let handler = {
+    get: function(target, name){
+        return name in target ? target[name] : 37;
+    }
+};
+
+let p = new Proxy({}, handler);
+
+p.a = 1;
+p.b = undefined;
+
+console.log(p.a, p.b);    // 1, undefined
+
+console.log('c' in p, p.c);    // false, 37
+```
+*无操作转发代理*`
+```
+let target = {};
+let p = new Proxy(target, {});
+
+p.a = 37;   // 操作转发到目标
+
+console.log(target.a);    // 37. 操作已经被正确地转发
+```
+*验证(通过代理，你可以轻松地验证向一个对象的传值。)*`
+```
+let validator = {
+  set: function(obj, prop, value) {
+    if (prop === 'age') {
+      if (!Number.isInteger(value)) {
+        throw new TypeError('The age is not an integer');
+      }
+      if (value > 200) {
+        throw new RangeError('The age seems invalid');
+      }
+    }
+
+    // The default behavior to store the value
+    obj[prop] = value;
+  }
+};
+
+let person = new Proxy({}, validator);
+
+person.age = 100;
+
+console.log(person.age);
+// 100
+
+person.age = 'young';
+// 抛出异常: Uncaught TypeError: The age is not an integer
+
+person.age = 300;
+// 抛出异常: Uncaught RangeError: The age seems invalid
 ```
 
+*扩展构造函数(方法代理可以轻松地通过一个新构造函数来扩展一个已有的构造函数。这个例子使用了construct和apply。)*`
+
 ```
+function extend(sup,base) {
+  var descriptor = Object.getOwnPropertyDescriptor(
+    base.prototype,"constructor"
+  );
+  base.prototype = Object.create(sup.prototype);
+  var handler = {
+    construct: function(target, args) {
+      var obj = Object.create(base.prototype);
+      this.apply(target,obj,args);
+      return obj;
+    },
+    apply: function(target, that, args) {
+      sup.apply(that,args);
+      base.apply(that,args);
+    }
+  };
+  var proxy = new Proxy(base,handler);
+  descriptor.value = proxy;
+  Object.defineProperty(base.prototype, "constructor", descriptor);
+  return proxy;
+}
 
-##### promise
+var Person = function(name){
+  this.name = name
+};
 
-##### 箭头函数
+var Boy = extend(Person, function(name, age) {
+  this.age = age;
+});
+
+Boy.prototype.sex = "M";
+
+var Peter = new Boy("Peter", 13);
+console.log(Peter.sex);  // "M"
+console.log(Peter.name); // "Peter"
+console.log(Peter.age);  // 13
+```
+#### promise
+
+#### 箭头函数
 
 *箭头函数表达式的语法比函数表达式更简洁，并且没有自己的this，arguments，super或 new.target。这些函数表达式更适用于那些本来需要匿名函数的地方，并且它们不能用作构造函数。*`
 
@@ -50,7 +154,7 @@ let f = ([a, b] = [1, 2], {x: c} = {x: a + b}) => a + b + c;
 f();  // 6
 
 ```
-##### Classes
+#### Classes
 ```
 class Polygon {
   constructor() {
@@ -81,4 +185,60 @@ class Square extends Polygon {
         this._area = value;
     }
 }
+```
+
+#### async function
+```
+function resolveAfter2Seconds(x) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(x);
+    }, 2000);
+  });
+};
+
+// async function expression assigned to a variable
+var add1 = async function(x) {
+  var a = await resolveAfter2Seconds(20);
+  var b = await resolveAfter2Seconds(30);
+  return x + a + b;
+}
+
+add1(10).then(v => {
+  console.log(v);  // 4 秒后打印 60
+})
+//另一个例子
+(async function(x) { // async function expression used as an IIFE
+  var p_a = resolveAfter2Seconds(20);
+  var p_b = resolveAfter2Seconds(30);
+  return x + await p_a + await p_b;
+})(10).then(v => {
+  console.log(v);  // 2 秒后打印 60
+});
+```
+
+#### await
+*await  操作符用于等待一个Promise 对象。它只能在异步函数 async function 中使用*`
+
+```
+function resolveAfter2Seconds(x) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(x);
+    }, 2000);
+  });
+}
+
+async function f1() {
+  var x = await resolveAfter2Seconds(10);
+  console.log(x); // 10
+}
+f1();
+
+```
+
+#### symbol
+*Symbol()函数会返回symbol类型的值,该类型具有静态属性和静态方法，是一种基本数据类型 （*`
+```
+Symbol("foo") === Symbol("foo"); // false
 ```
