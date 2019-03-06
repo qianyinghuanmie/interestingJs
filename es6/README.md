@@ -2,11 +2,11 @@
   es6笔记
 </h1>
 
-### 常用的一些es6语法
+## 常用的一些es6语法
 
 ---
 
-- proxy
+- [proxy](#proxy)
 + promise
 * 箭头函数
 - Classes
@@ -16,7 +16,7 @@
 + async function
 * await
 
-#### proxy
+### proxy
 
 *Proxy 对象用于定义基本操作的自定义行为（如属性查找，赋值，枚举，函数调用等）*`
 ```
