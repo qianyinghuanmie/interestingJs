@@ -7,12 +7,12 @@
 ---
 
 - [proxy](#proxy)
-+ promise
-* 箭头函数
-- Classes
-+ async function
-* await
-- symbol
++ [promise](#promise)
+* [箭头函数](#箭头函数)
+- [Classes](#classes)
++ [async](#async)
+* [await](#await)
+- [symbol](#symbol)
 + async function
 * await
 
@@ -122,9 +122,9 @@ console.log(Peter.sex);  // "M"
 console.log(Peter.name); // "Peter"
 console.log(Peter.age);  // 13
 ```
-#### promise
+### promise
 
-#### 箭头函数
+### 箭头函数
 
 *箭头函数表达式的语法比函数表达式更简洁，并且没有自己的this，arguments，super或 new.target。这些函数表达式更适用于那些本来需要匿名函数的地方，并且它们不能用作构造函数。*`
 
@@ -154,7 +154,7 @@ let f = ([a, b] = [1, 2], {x: c} = {x: a + b}) => a + b + c;
 f();  // 6
 
 ```
-#### Classes
+### Classes
 ```
 class Polygon {
   constructor() {
@@ -187,7 +187,7 @@ class Square extends Polygon {
 }
 ```
 
-#### async function
+### async function
 ```
 function resolveAfter2Seconds(x) {
   return new Promise(resolve => {
@@ -217,7 +217,7 @@ add1(10).then(v => {
 });
 ```
 
-#### await
+### await
 *await  操作符用于等待一个Promise 对象。它只能在异步函数 async function 中使用*`
 
 ```
@@ -237,7 +237,7 @@ f1();
 
 ```
 
-#### symbol
+### symbol
 *Symbol()函数会返回symbol类型的值,该类型具有静态属性和静态方法，是一种基本数据类型 （*`
 ```
 Symbol("foo") === Symbol("foo"); // false
