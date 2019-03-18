@@ -91,9 +91,19 @@ link(rel='stylesheet', href='/static/style.css')
 
 >- 6、[使用babel编译es6](https://github.com/pugjs/pug)
 
+>- 7、[解析表单提交返回的数据body的中间件](https://github.com/expressjs/body-parser)
+
+>- 9、[表单验证器](https://github.com/express-validator/express-validator#express-validatorr)
+
 ### 准备要实现的功能
 
 功能|完成度|完成日期
 --|:--:|--:
 注册|0|0
-登录|0|0
+登录|100%|2019-3-18
+
+### 测试的账号密码登录
+
+[测试地址](https://www.yyyno.com/login)
+
+test test

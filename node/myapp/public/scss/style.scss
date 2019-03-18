@@ -4,37 +4,111 @@ html {
 }
 body, dl, dd, h1, h2, h3, h4, h5, h6, p, form{margin:0;}   ol,liul{margin:0; padding:0;}
 
-html {
-    font-size: 16px;
+html{
+  font-size: px2rem(20px);
 }
-@media screen and (min-width: 375px) {
-    html {
-        /* iPhone6的375px尺寸作为16px基准，414px正好18px大小, 600 20px */
-        font-size: calc(100% + 2 * (100vw - 375px) / 39);
-        font-size: calc(16px + 2 * (100vw - 375px) / 39);
+// html {
+//     font-size: 16px;
+// }
+// @media screen and (min-width: 375px) {
+//     html {
+//         /* iPhone6的375px尺寸作为16px基准，414px正好18px大小, 600 20px */
+//         font-size: calc(100% + 2 * (100vw - 375px) / 39);
+//         font-size: calc(16px + 2 * (100vw - 375px) / 39);
+//     }
+// }
+// @media screen and (min-width: 414px) {
+//     html {
+//         /* 414px-1000px每100像素宽字体增加1px(18px-22px) */
+//         font-size: calc(112.5% + 4 * (100vw - 414px) / 586);
+//         font-size: calc(18px + 4 * (100vw - 414px) / 586);
+//     }
+// }
+// @media screen and (min-width: 600px) {
+//     html {
+//         /* 600px-1000px每100像素宽字体增加1px(20px-24px) */
+//         font-size: calc(125% + 4 * (100vw - 600px) / 400);
+//         font-size: calc(20px + 4 * (100vw - 600px) / 400);
+//     }
+// }
+// @media screen and (min-width: 1000px) {
+//     html {
+//         /* 1000px往后是每100像素0.5px增加 */
+//         font-size: calc(137.5% + 6 * (100vw - 1000px) / 1000);
+//         font-size: calc(22px + 6 * (100vw - 1000px) / 1000);
+//     }
+// }
+
+
+/*
+ * 此处 $base-font-size 具体数值根据设计图尺寸而定
+ * flexible中设置的标准是【fontSize=16px, when 屏幕宽度=375】，因此，按此标准进行计算，
+ * 若设计图为iPhone6(375*667)的二倍稿，则$base-font-size=32px
+ *
+ */
+@function px2rem($px, $base-font-size: 32px) {
+  @if (unitless($px)) {
+    @warn "Assuming #{$px} to be in pixels, attempting to convert it into pixels for you";
+    @return px2rem($px + 0px); // That may fail.
+  } @else if (unit($px) == rem) {
+    @return $px;
+  }
+  @return ($px / $base-font-size) * 1rem;
+}
+
+// 使用sass的混合宏
+@mixin px2rem($property, $px-values, $baseline-px:32px, $support-for-ie:false){
+    //Conver the baseline into rems
+    $baseline-rem: $baseline-px / 1rem * 1;
+    //Print the first line in pixel values
+    @if $support-for-ie {
+        #{$property}: $px-values;
+    }
+    //if there is only one (numeric) value, return the property/value line for it.
+    @if type-of($px-values) == "number"{
+        #{$property}: $px-values / $baseline-rem;
+    }
+    @else {
+        //Create an empty list that we can dump values into
+        $rem-values:();
+        @each $value in $px-values{
+            // If the value is zero or not a number, return it
+            @if $value == 0 or type-of($value) != "number"{
+                $rem-values: append($rem-values, $value / $baseline-rem);
+            }
+        }
+        // Return the property and its list of converted values
+        #{$property}: $rem-values;
     }
 }
-@media screen and (min-width: 414px) {
-    html {
-        /* 414px-1000px每100像素宽字体增加1px(18px-22px) */
-        font-size: calc(112.5% + 4 * (100vw - 414px) / 586);
-        font-size: calc(18px + 4 * (100vw - 414px) / 586);
-    }
+
+// 适配dpr的字体大小
+@mixin font-dpr($font-size){
+  font-size: $font-size;
+
+  [data-dpr="2"] & {
+      font-size: $font-size * 2;
+  }
+
+  [data-dpr="3"] & {
+      font-size: $font-size * 3;
+  }
 }
-@media screen and (min-width: 600px) {
-    html {
-        /* 600px-1000px每100像素宽字体增加1px(20px-24px) */
-        font-size: calc(125% + 4 * (100vw - 600px) / 400);
-        font-size: calc(20px + 4 * (100vw - 600px) / 400);
-    }
+@mixin px-dpr($property, $px) {
+  #{$property}: $px;
+
+  [data-dpr="2"] & {
+    #{$property}: $px * 2;
+  }
+
+  [data-dpr="3"] & {
+    #{$property}: $px * 3;
+  }
 }
-@media screen and (min-width: 1000px) {
-    html {
-        /* 1000px往后是每100像素0.5px增加 */
-        font-size: calc(137.5% + 6 * (100vw - 1000px) / 1000);
-        font-size: calc(22px + 6 * (100vw - 1000px) / 1000);
-    }
-}
+
+
+
+
 
 #indexPage{
     height: 100%;
@@ -51,7 +125,7 @@ a {
 
 #myForm {
   width: 100%;
-  height: 200px;
+  height: 6.25rem;
 }
 
 #canvas {
@@ -71,7 +145,7 @@ a {
   left: 0;
   color: rgba(#fff, 0.7);
   font-family: Georgia, serif;
-  font-size: 16px;
+  font-size: 0.5rem;
   text-align: center;
   letter-spacing: 0.1em;
   pointer-events: none;
@@ -91,7 +165,7 @@ a {
   bottom: 0;
   margin: auto;
   color: #fff;
-  font-size: .8rem;
+  // font-size: .8rem;
 }
 //登录的
 #loginPage{
@@ -99,3 +173,357 @@ a {
     font-size: 1rem;
   }
 }
+
+
+// Font Family
+$body-font: "Roboto";
+
+// Font Weights
+$thin: 100;
+$light: 300;
+$regular: 400;
+$semibold: 500;
+$bold: 700;
+$ultra: 800;
+
+// Base Font
+$base-font-family: $body-font, sans-serif;
+$base-font-size: 0.4375rem;
+$base-font-weight: $regular;
+$base-line-height: 1.6em;
+
+// Colors
+$black: #000000;
+$dark-gray: rgba($black, 0.8);
+$gray: rgba($black, 0.6);
+$light-gray: rgba($black, 0.4);
+$lighter-gray: rgba($black, 0.2);
+$white: #FFFFFF;
+$accent: #4285F4;
+
+// Form Settings
+$max-width: 18.75rem;
+$max-height: 12.5rem;
+$gutters: 0.75rem;
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  // background: linear-gradient(45deg,  rgba(66, 183, 245,0.8) 0%,rgba(66, 245, 189,0.4) 100%);
+  color: $gray;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  background: rgba($black, 0.8);
+  width: 100%;
+  height: 100%;
+}
+
+.form {
+  z-index: 15;
+  position: relative;
+  background: $white;
+  width: $max-width;
+  border-radius: 0.125rem;
+  box-shadow: 0 0 0.9375rem rgba($black, .1);
+  box-sizing: border-box;
+  margin: 3.125rem auto 0.3125rem;
+  overflow: hidden;
+
+  // Toggle
+  &-toggle {
+    z-index: 10;
+    position: absolute;
+    top: 1.875rem;
+    right: 1.875rem;
+    background: $white;
+    width: 1.875rem;
+    height: 1.875rem;
+    border-radius: 100%;
+    transform-origin: center;
+    transform: translate(0, -25%) scale(0);
+    opacity: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:before,
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.9375rem;
+      height: 0.125rem;
+      background: $accent;
+      transform: translate(-50%, -50%);
+    }
+
+    &:before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &:after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    &.visible {
+      transform: translate(0, -25%) scale(1);
+      opacity: 1;
+    }
+  }
+
+  &-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 0 0.625rem;
+
+    &:last-child {
+      margin: 0;
+    }
+
+    label {
+      display: block;
+      margin: 0 0 0.3125rem;
+      color: $gray;
+      font-size: 0.375rem;
+      font-weight: $semibold;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+
+      .two & {
+        color: $white;
+      }
+    }
+
+    input {
+      outline: none;
+      display: block;
+      background: rgba($black, 0.1);
+      width: 100%;
+      border: 0;
+      border-radius: 0.125rem;
+      box-sizing: border-box;
+      padding: 0.375rem 0.625rem;
+      color: $gray;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: $semibold;
+      line-height: inherit;
+      transition: 0.3s ease;
+
+      &:focus {
+        color: $dark-gray;
+      }
+
+      .two & {
+        color: $white;
+
+        &:focus {
+          color: $white;
+        }
+      }
+    }
+
+    button {
+      outline: none;
+      background: $accent;
+      width: 100%;
+      border: 0;
+      border-radius: 0.125rem;
+      padding: 0.375rem 0.625rem;
+      color: $white;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: $semibold;
+      line-height: inherit;
+      text-transform: uppercase;
+      cursor: pointer;
+
+      .two & {
+        background: $white;
+        color: $accent;
+      }
+    }
+
+    .form-remember {
+      font-size: 0.375rem;
+      font-weight: $regular;
+      letter-spacing: 0;
+      text-transform: none;
+
+      input[type='checkbox'] {
+        display: inline-block;
+        width: auto;
+        margin: 0 0.3125rem 0 0;
+      }
+    }
+
+    .form-recovery {
+      color: $accent;
+      font-size: 0.375rem;
+      text-decoration: none;
+    }
+  }
+
+  // Panel
+  &-panel {
+    padding: 1.875rem calc(5% + 1.875rem) 1.875rem 1.875rem;
+    box-sizing: border-box;
+
+    // Panel One
+    &.one {
+      &:before {
+        @extend .overlay;
+
+        content: '';
+        display: block;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.3s ease;
+      }
+
+      &.hidden {
+        &:before {
+          display: block;
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+
+    // Panel Two
+    &.two {
+      z-index: 5;
+      position: absolute;
+      top: 0;
+      left: 95%;
+      background: $accent;
+      width: 100%;
+      min-height: 100%;
+      padding: 1.875rem calc(10% + 1.875rem) 1.875rem 1.875rem;
+      transition: 0.3s ease;
+      cursor: pointer;
+
+      &:before,
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 1.875rem;
+        left: 1.5%;
+        background: rgba($white, 0.2);
+        height: 0.9375rem;
+        width: 0.0625rem;
+        transition: 0.3s ease;
+      }
+
+      &:after {
+        left: 3%;
+      }
+
+      &:hover {
+        left: 93%;
+        box-shadow: 0 0 0.3125rem rgba($black, 0.2);
+
+        &:before,
+        &:after {
+          opacity: 0;
+        }
+      }
+
+      &.active {
+        left: 10%;
+        box-shadow: 0 0 0.3125rem rgba($black, 0.2);
+        cursor: default;
+
+        &:before,
+        &:after {
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  // Header
+  &-header {
+    margin: 0 0 1.25rem;
+
+    h1 {
+      padding: 0.125rem 0;
+      color: $accent;
+      font-size: 0.75rem;
+      font-weight: $bold;
+      text-transform: uppercase;
+
+      .two & {
+        position: relative;
+        z-index: 40;
+        color: $white;
+      }
+    }
+  }
+
+  // Content
+  &-content {}
+
+  &-footer {}
+}
+
+// Pen Footer
+.pen-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: $max-width;
+  margin: 0 auto 3.125rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  a {
+    color: $white;
+    font-size: 0.375rem;
+    text-decoration: none;
+    text-shadow: 1px 0.0625rem 0 rgba($black, .1);
+
+    .material-icons {
+      width: 0.375rem;
+      margin: 0 0.1562rem;
+      vertical-align: middle;
+      font-size: 0.375rem;
+    }
+  }
+}
+
+.cp-fab {
+  background: $white !important;
+  color: $accent !important;
+}
+.form{
+  margin: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin:  auto;
+  max-height: 22rem;
+}
+.container::before { background: url("http://file.yyyno.com/file/img/mysite/login.jpg") 0 / cover fixed; }
+.container { position: relative; background: hsla(0,0%,100%,.3);     height: 100%;}
+.container::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; filter: blur(2px); }

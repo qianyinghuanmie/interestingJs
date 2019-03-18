@@ -1,23 +1,71 @@
 extends layout
 
 block content
-  
-  div#loginPage
-    h1= title.name
-    p Welcome to #{title.name}
-    input(
-    type='checkbox'
-    name='agreement'
-    checked
-    )
-    input(
-    type='text'
-    name='agreement'
-    )
-    div(class='div-class', (click)='play()') 点击运行
-    - var btnType = 'info'
-    - var btnSize = 'lg'
-    button(type='button' class='btn btn-' + btnType + ' btn-' + btnSize) 登录
-    |
-    |
-    button(type='button' class=`btn btn-${btnType} btn-${btnSize}`) 注册
+  // Form
+  script(src="/static/js/registered.js")
+  .container
+    .form
+      .form-toggle
+      .form-panel.one
+        .form-header
+          h1 账号登录
+        .form-content
+          form(method="post")
+            .form-group
+              label(for='username') 用户名
+              input(type='text'
+                    id='username'
+                    name='username'
+                    required)
+            .form-group
+              label(for='password') 密码
+              input(type='password'
+                    id='password'
+                    name='password'
+                    required)
+            .form-group
+              label.form-remember
+                input(type='checkbox')
+                | 记住我
+              a.form-recovery(href='#') 忘记密码?
+            .form-group
+              button(type='submit') 登录
+      .form-panel.two
+        .form-header
+          h1 Register Account
+        .form-content
+          form
+            .form-group
+              label(for='username') 用户名
+              input(type='text'
+                    id='username'
+                    name='username'
+                    required)
+            .form-group
+              label(for='password') 密码
+              input(type='password'
+                    id='password'
+                    name='password'
+                    required)
+            .form-group
+              label(for='cpassword') 确认密码
+              input(type='password'
+                    id='cpassword'
+                    name='cpassword'
+                    required)
+            .form-group
+              label(for='email') 邮箱
+              input(type='email'
+                    id='email'
+                    name='email'
+                    required)
+            .form-group
+              button(type='submit') 注册
+    .pen-footer
+      a(href='https://www.cnblogs.com/star-wind/')
+        i.material-icons 
+        | 去我的博客
+      a(href='https://github.com/qianyinghuanmie/interestingJs/tree/master/node/myapp'
+        target='_blank')
+        | 去 Github点赞
+        i.material-icons 
