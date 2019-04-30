@@ -15,6 +15,8 @@
 - [symbol](#symbol)
 + [yield](#yield)
 * [function*](#function*)
+- [reflect](#reflect)
++ [fetch*](#fetch*)
 
 ### proxy
 
@@ -446,4 +448,22 @@ console.log(appleStore.next());
 var x = function*(y) {
    yield y * y;
 };
+```
+### reflect
+
+*Reflect对象与Proxy对象一样，也是 ES6 为了操作对象而提供的新 API*`
+
+### fetch
+
+*Fetch API 提供了一个 JavaScript接口，用于访问和操纵HTTP管道的部分，例如请求和响应。它还提供了一个全局 fetch()方法，该方法提供了一种简单，合理的方式来跨网络异步获取资源。*`
+
+```
+fetch('http://example.com/movies.json')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(myJson);
+  });
+  
 ```

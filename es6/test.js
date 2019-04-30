@@ -1,5 +1,5 @@
-var x = function*(y) {
-  yield y * y;
-};
-console.log(x(2).next());
-console.log(x(2).next());
+
+const a = {name:"1"};
+console.log(a);
+ a = {name:"2"};
+console.log(a);
