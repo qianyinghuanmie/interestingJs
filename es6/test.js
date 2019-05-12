@@ -1,5 +1,7 @@
+var  car = function(){
 
-const a = {name:"1"};
-console.log(a);
- a = {name:"2"};
-console.log(a);
+};
+
+var car1 = new car();
+
+console.log(car.construct.prototype);
