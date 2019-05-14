@@ -37,11 +37,12 @@ Some basic and interesting knowledge of JavaScript
   3、面向对象
 
   4、数组
+
     一些常用的方法
 
     方法|描述
     --|:--:
-    concat()|连接两个或更多的数组，并返回结果
+    concat() | 连接两个或更多的数组，并返回结果
     copyWithin()|	从数组的指定位置拷贝元素到数组的另一个指定位置中。
     entries()|返回数组的可迭代对象。
     fill()|	使用一个固定值来填充数组。
