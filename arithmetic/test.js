@@ -1,17 +1,13 @@
-function car() {
-  this.say=function () {
-    console.log("hello");
+function sort(arr){
+  for (var i = 0; i < arr.length-1; i++) {
+    for (var j = 0; j < arr.length-i-1; j++) {
+      if(arr[j]>arr[j+1]){
+        var temp = arr[j];
+        arr[j] = arr[j+1];
+        arr[j+1]= temp
+      }
+    }
   }
+  return arr;
 }
-car.prototype.move=function () {
-  console.log("move111");
-}
-var car1 = new car();
-var car2 = new car();
-car1.move()
-console.log(car.prototype);
-console.log(car);
-// console.log(car1);
-car2.say=function () {
-  console.log("no");
-}
+console.log(sort([5,6,3,77,42,6,2]));
